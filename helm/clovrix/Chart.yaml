@@ -1,0 +1,9 @@
+apiVersion: v2
+name: clovrix
+description: Clovrix — Automated Compliance Solution & Integration Framework
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords: [compliance, iso42001, soc2, gdpr, ai-governance]
+maintainers:
+  - name: Clovrix Team

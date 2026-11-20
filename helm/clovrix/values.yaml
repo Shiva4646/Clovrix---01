@@ -1,0 +1,259 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Clovrix Helm Chart — Production Kubernetes Values
+# Override values: helm upgrade clovrix ./helm/clovrix -f custom-values.yaml
+# ══════════════════════════════════════════════════════════════════════════════
+
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+# ── Replica counts (scale per service) ───────────────────────────────────────
+replicaCount:
+  api:      2
+  worker:   2
+  frontend: 2
+
+# ── Container images ──────────────────────────────────────────────────────────
+image:
+  api:
+    repository: clovrix/api
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: clovrix/frontend
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+
+# ── Ingress ───────────────────────────────────────────────────────────────────
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rate-limit: "200"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: app.clovrix.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /swagger
+          pathType: Prefix
+          service: api
+  tls:
+    - secretName: clovrix-tls
+      hosts: [app.clovrix.example.com]
+
+# ── API Service ───────────────────────────────────────────────────────────────
+api:
+  service:
+    type: ClusterIP
+    port: 8080
+  resources:
+    requests: { cpu: 500m, memory: 512Mi }
+    limits:   { cpu: 2000m, memory: 2Gi }
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+  env:
+    RUN_MODE: api
+    ASPNETCORE_ENVIRONMENT: Production
+
+# ── Worker Service ────────────────────────────────────────────────────────────
+worker:
+  resources:
+    requests: { cpu: 250m, memory: 256Mi }
+    limits:   { cpu: 1000m, memory: 1Gi }
+  env:
+    RUN_MODE: worker
+    ASPNETCORE_ENVIRONMENT: Production
+
+# ── Frontend ──────────────────────────────────────────────────────────────────
+frontend:
+  service:
+    type: ClusterIP
+    port: 3000
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits:   { cpu: 500m, memory: 512Mi }
+
+# ── PostgreSQL ────────────────────────────────────────────────────────────────
+postgresql:
+  enabled: true
+  auth:
+    username: clovrix
+    database: clovrix
+    existingSecret: clovrix-postgres-secret
+  primary:
+    resources:
+      requests: { cpu: 500m, memory: 1Gi }
+      limits:   { cpu: 2000m, memory: 4Gi }
+    persistence:
+      enabled: true
+      size: 100Gi
+  readReplicas:
+    replicaCount: 1
+
+# ── PgBouncer ─────────────────────────────────────────────────────────────────
+pgbouncer:
+  enabled: true
+  poolMode: transaction
+  maxClientConn: 1000
+  defaultPoolSize: 25
+
+# ── Valkey (Redis-compatible) ─────────────────────────────────────────────────
+valkey:
+  enabled: true
+  auth:
+    existingSecret: clovrix-valkey-secret
+  cluster:
+    enabled: false  # set true for multi-region
+  master:
+    resources:
+      requests: { cpu: 100m, memory: 128Mi }
+      limits:   { cpu: 500m, memory: 512Mi }
+    persistence:
+      enabled: true
+      size: 10Gi
+
+# ── RabbitMQ ──────────────────────────────────────────────────────────────────
+rabbitmq:
+  enabled: true
+  auth:
+    username: clovrix
+    existingPasswordSecret: clovrix-rabbitmq-secret
+  replicaCount: 3  # Quorum queues require odd number
+  persistence:
+    enabled: true
+    size: 20Gi
+  resources:
+    requests: { cpu: 250m, memory: 512Mi }
+    limits:   { cpu: 1000m, memory: 2Gi }
+
+# ── MinIO ─────────────────────────────────────────────────────────────────────
+minio:
+  enabled: true
+  mode: distributed
+  replicas: 4
+  auth:
+    existingSecret: clovrix-minio-secret
+  persistence:
+    enabled: true
+    size: 500Gi
+  resources:
+    requests: { cpu: 250m, memory: 512Mi }
+
+# ── Keycloak ──────────────────────────────────────────────────────────────────
+keycloak:
+  enabled: true
+  replicaCount: 2
+  auth:
+    adminUser: admin
+    existingSecret: clovrix-keycloak-secret
+  postgresql:
+    enabled: false
+    external:
+      host: postgresql
+      database: clovrix
+      existingSecret: clovrix-postgres-secret
+
+# ── Qdrant ────────────────────────────────────────────────────────────────────
+qdrant:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 50Gi
+
+# ── Meilisearch ───────────────────────────────────────────────────────────────
+meilisearch:
+  enabled: true
+  environment:
+    MEILI_ENV: production
+  auth:
+    existingMasterKeySecret: clovrix-meili-secret
+  persistence:
+    enabled: true
+    size: 20Gi
+
+# ── Ollama ────────────────────────────────────────────────────────────────────
+ollama:
+  enabled: true
+  model: llama3.2:1b
+  resources:
+    requests: { cpu: 2000m, memory: 4Gi }
+    limits:   { memory: 8Gi }
+  # Uncomment for GPU support:
+  # nodeSelector:
+  #   cloud.google.com/gke-accelerator: nvidia-tesla-t4
+  # tolerations:
+  #   - key: nvidia.com/gpu
+  #     operator: Exists
+  #     effect: NoSchedule
+  # resources:
+  #   limits:
+  #     nvidia.com/gpu: "1"
+
+# ── OpenBao ───────────────────────────────────────────────────────────────────
+openbao:
+  enabled: true
+  server:
+    ha:
+      enabled: true
+      replicas: 3
+    dataStorage:
+      enabled: true
+      size: 10Gi
+
+# ── Monitoring ────────────────────────────────────────────────────────────────
+prometheus:
+  enabled: true
+  server:
+    retention: 30d
+    persistentVolume:
+      enabled: true
+      size: 50Gi
+
+grafana:
+  enabled: true
+  adminPassword: "" # Set via secret
+  persistence:
+    enabled: true
+    size: 10Gi
+
+# ── Secrets (created out-of-band, referenced by name) ─────────────────────────
+secrets:
+  postgres:  clovrix-postgres-secret
+  valkey:    clovrix-valkey-secret
+  rabbitmq:  clovrix-rabbitmq-secret
+  minio:     clovrix-minio-secret
+  keycloak:  clovrix-keycloak-secret
+  meili:     clovrix-meili-secret
+  jwt:       clovrix-jwt-secret
+
+# ── Service Account ───────────────────────────────────────────────────────────
+serviceAccount:
+  create: true
+  name: clovrix
+
+# ── Pod Security ──────────────────────────────────────────────────────────────
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  fsGroup: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop: [ALL]
+
+# ── Network Policy ────────────────────────────────────────────────────────────
+networkPolicy:
+  enabled: true

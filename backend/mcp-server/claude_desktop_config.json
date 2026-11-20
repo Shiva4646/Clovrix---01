@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "clovrix": {
+      "url": "http://localhost:5100/sse",
+      "description": "Clovrix GRC Platform — AI Governance, Risk & Compliance tools"
+    }
+  }
+}

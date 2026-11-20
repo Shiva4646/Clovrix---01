@@ -1,0 +1,35 @@
+# Dependencies and build output
+node_modules/
+dist/
+bin/
+obj/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pfx
+*.pem
+
+# Databases and credentials
+backup.sql
+clovrix_database.sql
+full-audit-cycle-test.ps1
+audit_cycle_seed.sql
+audit-cycle-output.txt
+FULL_AUDIT_CYCLE_REPORT.md
+AUDIT_CYCLE_WORKFLOW_REPORT.md
+clovrix-demo-guide.html
+token.txt
+
+# IDE and tooling
+.idea/
+.vscode/
+*.user
+
+# Logs and runtime files
+*.log
+logs/
+
+# Duplicate nested project copy
+/clovrix-platform_v1/

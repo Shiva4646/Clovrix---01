@@ -1,0 +1,90 @@
+<svg viewBox="0 0 1000 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0056B3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1DB9A2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0056B3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1DB9A2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="darkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#001052;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#003D8F;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4C7FFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1DB9A2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main logo group -->
+  <g transform="translate(500, 300)">
+    <!-- Left curved crescent (navy) -->
+    <path d="M -250 -100 Q -300 0 -250 100" stroke="url(#darkGradient)" stroke-width="110" fill="none" stroke-linecap="round" opacity="1"/>
+
+    <!-- Shield background (dark navy) -->
+    <path d="M -90 -80 L 90 -80 L 90 50 Q 0 150 -90 50 Z" fill="#001052" stroke="none"/>
+
+    <!-- Shield border (white) -->
+    <path d="M -90 -80 L 90 -80 L 90 50 Q 0 150 -90 50 Z" fill="none" stroke="white" stroke-width="8"/>
+
+    <!-- Circuit board pattern (3 vertical lines and nodes) -->
+    <!-- Left vertical line with nodes -->
+    <line x1="-35" y1="-60" x2="-35" y2="60" stroke="#00BFFF" stroke-width="5" opacity="0.9"/>
+    <circle cx="-35" cy="-40" r="8" fill="#00BFFF"/>
+    <circle cx="-35" cy="0" r="7" fill="#0056B3"/>
+    <circle cx="-35" cy="40" r="8" fill="#1DB9A2"/>
+
+    <!-- Center vertical line with nodes -->
+    <line x1="0" y1="-70" x2="0" y2="60" stroke="#0056B3" stroke-width="5" opacity="0.9"/>
+    <circle cx="0" cy="-55" r="9" fill="#0056B3"/>
+    <circle cx="0" cy="0" r="9" fill="#0056B3"/>
+    <circle cx="0" cy="50" r="8" fill="#0056B3"/>
+
+    <!-- Right vertical line with nodes -->
+    <line x1="35" y1="-60" x2="35" y2="60" stroke="#00BFFF" stroke-width="5" opacity="0.9"/>
+    <circle cx="35" cy="-40" r="8" fill="#00BFFF"/>
+    <circle cx="35" cy="0" r="7" fill="#0056B3"/>
+    <circle cx="35" cy="40" r="8" fill="#1DB9A2"/>
+
+    <!-- Horizontal connection line -->
+    <line x1="-35" y1="0" x2="35" y2="0" stroke="#1DB9A2" stroke-width="4" opacity="0.8"/>
+
+    <!-- Top right accent diamond -->
+    <g transform="translate(130, -80) rotate(45)">
+      <rect x="-45" y="-45" width="90" height="90" fill="url(#accentGradient)" opacity="0.85" rx="8"/>
+    </g>
+
+    <!-- Bottom right accent shape -->
+    <path d="M 140 70 Q 180 110 140 150" stroke="url(#accentGradient)" stroke-width="65" fill="none" stroke-linecap="round" opacity="0.75"/>
+  </g>
+
+  <!-- CLOVRIX Text with gradient on O -->
+  <g transform="translate(500, 900)">
+    <!-- C -->
+    <text x="-180" y="0" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#001052" letter-spacing="0">C</text>
+    <!-- L -->
+    <text x="-80" y="0" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#001052" letter-spacing="0">L</text>
+    <!-- O with gradient -->
+    <text x="20" y="0" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="url(#textGradient)" letter-spacing="0">O</text>
+    <!-- V -->
+    <text x="120" y="0" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#001052" letter-spacing="0">V</text>
+    <!-- R -->
+    <text x="200" y="0" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#001052" letter-spacing="0">R</text>
+    <!-- I -->
+    <text x="260" y="0" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#001052" letter-spacing="0">I</text>
+    <!-- X in teal -->
+    <text x="330" y="0" font-family="Arial, sans-serif" font-size="140" font-weight="900" text-anchor="middle" fill="#1DB9A2" letter-spacing="0">X</text>
+  </g>
+
+  <!-- Tagline -->
+  <text x="500" y="1050" font-family="Arial, sans-serif" font-size="32" font-weight="500" text-anchor="middle" fill="#0056B3" letter-spacing="1.5">
+    GOVERN AI. MANAGE RISK. ENSURE COMPLIANCE.
+  </text>
+
+  <!-- Decorative lines under tagline -->
+  <line x1="150" y1="1080" x2="350" y2="1080" stroke="#0056B3" stroke-width="2" opacity="0.5"/>
+  <line x1="650" y1="1080" x2="850" y2="1080" stroke="#1DB9A2" stroke-width="2" opacity="0.5"/>
+</svg>
